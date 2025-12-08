@@ -1,0 +1,7 @@
+name = "thenaeun-jeju"
+compatibility_date = "2024-01-01"
+
+[[d1_databases]]
+binding = "thenaeun-jeju-db"
+database_name = "thenaeun-jeju-db"
+database_id = "8eb54fc2-7408-4e78-9759-698bbd9a486d"

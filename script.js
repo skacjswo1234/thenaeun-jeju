@@ -96,23 +96,36 @@ topBtn.style.transition = 'opacity 0.3s';
 const contactForm = document.getElementById('contactForm');
 
 if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
+    contactForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         
         const formData = {
             name: document.getElementById('name').value,
             phone: document.getElementById('phone').value,
-            age: document.getElementById('age').value,
+            age: parseInt(document.getElementById('age').value),
             message: document.getElementById('message').value
         };
 
-        // 여기에 실제 폼 제출 로직을 추가하세요
-        // 예: 서버로 데이터 전송, 이메일 발송 등
-        
-        alert('문의가 접수되었습니다. 빠른 시일 내에 연락드리겠습니다.');
-        
-        // 폼 초기화
-        contactForm.reset();
+        try {
+            const response = await fetch('/api/inquiries', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (response.ok) {
+                alert('문의가 접수되었습니다. 빠른 시일 내에 연락드리겠습니다.');
+                contactForm.reset();
+            } else {
+                const error = await response.json();
+                alert('문의 접수에 실패했습니다: ' + (error.error || '알 수 없는 오류'));
+            }
+        } catch (error) {
+            console.error('문의 제출 실패:', error);
+            alert('문의 접수에 실패했습니다. 잠시 후 다시 시도해주세요.');
+        }
     });
 }
 
