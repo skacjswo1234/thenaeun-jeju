@@ -116,15 +116,15 @@ if (contactForm) {
             });
 
             if (response.ok) {
-                alert('문의가 접수되었습니다. 빠른 시일 내에 연락드리겠습니다.');
+                showSuccessModal();
                 contactForm.reset();
             } else {
                 const error = await response.json();
-                alert('문의 접수에 실패했습니다: ' + (error.error || '알 수 없는 오류'));
+                showErrorModal(error.error || '알 수 없는 오류');
             }
         } catch (error) {
             console.error('문의 제출 실패:', error);
-            alert('문의 접수에 실패했습니다. 잠시 후 다시 시도해주세요.');
+            showErrorModal('문의 접수에 실패했습니다. 잠시 후 다시 시도해주세요.');
         }
     });
 }
@@ -151,5 +151,43 @@ images.forEach(img => {
     img.addEventListener('error', function() {
         this.style.display = 'none';
     });
+});
+
+// 성공 모달 표시
+function showSuccessModal() {
+    const modal = document.getElementById('successModal');
+    modal.style.display = 'flex';
+}
+
+// 성공 모달 닫기
+function closeSuccessModal() {
+    const modal = document.getElementById('successModal');
+    modal.style.display = 'none';
+}
+
+// 에러 모달 표시
+function showErrorModal(message) {
+    const modal = document.getElementById('errorModal');
+    const errorMsg = document.getElementById('errorMessage');
+    errorMsg.textContent = message;
+    modal.style.display = 'flex';
+}
+
+// 에러 모달 닫기
+function closeErrorModal() {
+    const modal = document.getElementById('errorModal');
+    modal.style.display = 'none';
+}
+
+// 모달 외부 클릭 시 닫기
+window.addEventListener('click', (e) => {
+    const successModal = document.getElementById('successModal');
+    const errorModal = document.getElementById('errorModal');
+    if (e.target === successModal) {
+        closeSuccessModal();
+    }
+    if (e.target === errorModal) {
+        closeErrorModal();
+    }
 });
 
